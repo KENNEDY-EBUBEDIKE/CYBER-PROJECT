@@ -1,0 +1,255 @@
+{% extends 'blank.html' %}
+{% block title %}
+	<title>CYBER | Vault</title>
+{% endblock %}
+
+{% block content %}
+{% load static %}
+	<script>let dec_id;</script>
+	<div class="row"> {% csrf_token %}
+		<div class="col-xl-12 d-flex">
+			<div class="card radius-10 w-100">
+				<div class="card-body">
+					<div class="d-flex align-items-center">
+						<div>
+							<h5 class="mb-1">Documents Encrypted In Vault</h5>
+							<p class="mb-0 font-13"><i class='bx bxs-calendar'></i>In Recent Days</p>
+						</div>
+						<div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+						</div>
+					</div>
+					<div class="table-responsive mt-4">
+						<table class="table align-middle mb-0 table-hover" id="Transaction-History">
+							<thead class="table-light">
+								<tr>
+									<th>Document Uploaded By</th>
+									<th>Date & Time Uploaded</th>
+									<th>Document Name</th>
+									<th>Status</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for doc in vault_items %}
+
+									<tr>
+										<td>
+											<div class="d-flex align-items-center">
+												<div class="">
+													<img src="{{doc.uploaded_by.photo.url}}" class="rounded-circle" width="46" height="46" alt="" />
+												</div>
+												<div class="ms-2">
+													<h6 class="mb-1 font-14">{{doc.uploaded_by.surname}}  {{doc.uploaded_by.first_name}}</h6>
+													<p class="mb-0 font-13">Refrence Id #8547846</p>
+												</div>
+											</div>
+										</td>
+										<td>{{doc.created_at}}</td>
+										<td>{{doc.name}}</td>
+										<td>
+											<div class="d-flex align-items-center text-white">	<i class='bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1'></i>
+												<span id="status_bar">{{doc.status}}</span>
+											</div>
+										</td>
+										<td>
+											<div class="d-flex order-actions">
+												<a href="javascript:" onclick="getId({{doc.id}})" data-bs-toggle="modal" data-bs-target="#secretCollectionModal" id="decrypt"><i class="bx bx-code"></i></a>
+												<a href="javascript:"  onclick="dwnd({{doc.id}})" class="ms-4" id="download"><i class='bx bxs-download'></i></a>
+												<a href="javascript:" onclick="delete_file({{doc.id}})" class="ms-4" id="delete"><i class='bx bxs-trash'></i></a>
+											</div>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--end row-->
+	<div class="modal fade" id="secretCollectionModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Modal title</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+
+				<div class="card border-top border-0 border-4 border-white">
+					<div class="card-body p-5">
+						<div class="card-title text-center"><i class="bx bxs-lock-alt text-white font-50"></i>
+							<h5 class="mb-5 mt-2 text-white">Secret Collection</h5>
+						</div>
+						<hr>
+						<form class="row g-3" id="secretsForm">
+							<div class="col-9">
+								<label for="secret1" class="form-label">Enter Secret</label>
+								<div class="input-group input-group-sm"> <span class="input-group-text"><i class='bx bxs-lock-open'></i></span>
+									<input type="text" class="form-control border-start-0" id="secret1" placeholder="Secret	" />
+								</div>
+							</div>
+							<div class="col-3">
+								<label for="index1" class="form-label">	 Index</label>
+								<div class="input-group input-group-sm"> <span class="input-group-text"><i class='bx bxs-user'></i></span>
+									<input type="text" class="form-control border-start-0" id="index1" placeholder="Index" />
+								</div>
+							</div>
+
+							<div class="col-9">
+								<label for="secret2" class="form-label">Enter Secret</label>
+								<div class="input-group input-group-sm"> <span class="input-group-text"><i class='bx bxs-lock-open'></i></span>
+									<input type="text" class="form-control border-start-0" id="secret2" placeholder="Secret	" />
+								</div>
+							</div>
+							<div class="col-3">
+								<label for="index2" class="form-label">	 Index</label>
+								<div class="input-group input-group-sm"> <span class="input-group-text"><i class='bx bxs-user'></i></span>
+									<input type="text" class="form-control border-start-0" id="index2" placeholder="Index" />
+								</div>
+							</div>
+
+							<div class="col-9">
+								<label for="secret3" class="form-label">Enter Secret</label>
+								<div class="input-group input-group-sm"> <span class="input-group-text"><i class='bx bxs-lock-open'></i></span>
+									<input type="text" class="form-control border-start-0" id="secret3" placeholder="Secret	" />
+								</div>
+							</div>
+							<div class="col-3">
+								<label for="index3" class="form-label">	 Index</label>
+								<div class="input-group input-group-sm"> <span class="input-group-text"><i class='bx bxs-user'></i></span>
+									<input type="text" class="form-control border-start-0" id="index3" placeholder="Index" />
+								</div>
+							</div>
+
+							<div class="col-9">
+								<label for="secret4" class="form-label">Enter Secret</label>
+								<div class="input-group input-group-sm"> <span class="input-group-text"><i class='bx bxs-lock-open'></i></span>
+									<input type="text" class="form-control border-start-0" id="secret4" placeholder="Secret	" />
+								</div>
+							</div>
+							<div class="col-3">
+								<label for="index4" class="form-label">	 Index</label>
+								<div class="input-group input-group-sm"> <span class="input-group-text"><i class='bx bxs-user'></i></span>
+									<input type="text" class="form-control border-start-0" id="index4" placeholder="Index" />
+								</div>
+							</div>
+
+						</form>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="button" onclick="decrypt(dec_id)" class="btn btn-primary">Decrypt</button>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block extra_script %}
+	<script>
+		$(document).ready(function() {
+			$('#Transaction-History').DataTable({
+				lengthMenu: [[6, 10, 20, -1], [6, 10, 20, 'Todos']]
+			})
+		  } )
+	</script>
+    <script>
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    </script>
+	<script>
+
+		dwnd = (id)=>{
+			$.ajax({
+				url: "/api/features/download/",
+				type: 'POST',
+				data: {"id": id,},
+				dataType: "json",
+				headers: {'X-CSRFToken': csrftoken},
+				mode: 'same-origin',
+				success: function (response){
+					console.log(response)
+					alert("About to Download a File")
+					window.open(response.file, '_blank');
+				},
+			})
+		}
+
+		getId = (id)=>{
+			dec_id = id
+		}
+
+		delete_file = (id)=>{
+			$.ajax({
+				url: "/api/features/delete/",
+				type: 'DELETE',
+				data: {"id": id,},
+				dataType: "json",
+				headers: {'X-CSRFToken': csrftoken},
+				mode: 'same-origin',
+				success: function (response){
+					if (response.success){
+						alert("Deleted")
+						window.location.reload()
+					}
+				},
+			})
+		}
+
+		lock_back = (id)=>{
+			console.log("Called")
+			$.ajax({
+				url: "/api/features/done/",
+				type: 'POST',
+				data: {"id": id,},
+				dataType: "json",
+				headers: {'X-CSRFToken': csrftoken},
+				mode: 'same-origin',
+			})
+		}
+
+		decrypt = (id)=>{
+
+			let secs = []
+			let indices = []
+			const onlyInputs = document.querySelectorAll('#secretsForm input');
+			onlyInputs.forEach(input => {
+				if(input.value){
+					if(input.id.includes("secret")){
+					secs.push(input.value)
+				  }else if(input.id.includes("index")){
+					indices.push(parseInt(input.value))
+				  }
+				}
+			});
+
+			$.ajax({
+				url: "/api/features/decrypt/",
+				type: 'POST',
+				data: JSON.stringify({
+					"id": id,
+					"secrets": secs,
+					"indices": indices,
+				}),
+				dataType: "json",
+				headers: {'X-CSRFToken': csrftoken},
+				mode: 'same-origin',
+				contentType: "application/json; charset=utf-8",
+				success: function (response){
+					if (response.success){
+						lock_back(id)
+						$('#secretCollectionModal').modal('hide');
+						alert(response.message)
+						window.open(response.file, '_blank');
+
+					}else{
+						alert(response.message)
+					}
+				},
+			})
+		}
+	</script>
+
+{% endblock %}

@@ -1,0 +1,287 @@
+{% extends 'blank.html' %}
+{% block title %}
+	<title>CYBER | Dashboard</title>
+{% endblock %}
+{% block content %}
+	{% load static %}
+			<div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3">
+				<div class="col">
+					<div class="card radius-10">
+						<div class="card-body">
+							<div class="d-flex align-items-center">
+								<div>
+									<p class="mb-0">Encrypted Files</p>
+									<h4 class="my-1">4805</h4>
+									<p class="mb-0 font-13"><i class='bx bxs-up-arrow align-middle'></i>34 Since last week</p>
+								</div>
+								<div class="widgets-icons ms-auto"><i class='bx bxs-wallet'></i>
+								</div>
+							</div>
+							<div id="chart1"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="card radius-10">
+						<div class="card-body">
+							<div class="d-flex align-items-center">
+								<div>
+									<p class="mb-0">Total Platform Users</p>
+									<h4 class="my-1">8.4K</h4>
+									<p class="mb-0 font-13"><i class='bx bxs-up-arrow align-middle'></i>14% Since last week</p>
+								</div>
+								<div class="widgets-icons ms-auto"><i class='bx bxs-group'></i>
+								</div>
+							</div>
+							<div id="chart2"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-12">
+					<div class="card radius-10">
+						<div class="card-body">
+							<div class="d-flex align-items-center">
+								<div>
+									<p class="mb-0">Total Uploaded Files</p>
+									<h4 class="my-1">59K</h4>
+									<p class="mb-0 font-13"><i class='bx bxs-down-arrow align-middle'></i>12.4% Since last week</p>
+								</div>
+								<div class="widgets-icons ms-auto"><i class='bx bxs-binoculars'></i>
+								</div>
+							</div>
+							<div id="chart3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--end row-->
+			<div class="row row-cols-1 row-cols-xl-2">
+				<div class="col d-flex">
+					<div class="card radius-10 w-100">
+						<div class="card-body">
+							<div class="d-flex align-items-center">
+								<div>
+									<h5 class="mb-1">Vault Metrics</h5>
+									<p class="mb-0 font-13"><i class='bx bxs-calendar'></i>in last 30 days</p>
+								</div>
+								<div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+								</div>
+							</div>
+							<div class="row row-cols-1 row-cols-sm-3 mt-4">
+								<div class="col">
+									<div>
+										<p class="mb-0">Encrypted files</p>
+										<h4 class="my-1 text-white">4805</h4>
+										<p class="mb-0 font-13"><i class='bx bxs-up-arrow align-middle'></i>34</p>
+									</div>
+								</div>
+								<div class="col">
+									<div>
+										<p class="mb-0">Total Platform Users</p>
+										<h4 class="my-1 text-white">8.4K</h4>
+										<p class="mb-0 font-13"><i class='bx bxs-up-arrow align-middle'></i>12.3% Since last month</p>
+									</div>
+								</div>
+								<div class="col">
+									<div>
+										<p class="mb-0">Total Uploaded Files</p>
+										<h4 class="my-1 text-white">59K</h4>
+										<p class="mb-0 font-13"><i class='bx bxs-down-arrow align-middle'></i>2.4% Since last month</p>
+									</div>
+								</div>
+							</div>
+							<div id="chart4"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col d-flex">
+					<div class="card radius-10 w-100">
+						<div class="card-body">
+							<div class="d-flex align-items-center">
+								<div>
+									<h5 class="mb-1">Top Secret Encrypted Files</h5>
+									<p class="mb-0 font-13"><i class='bx bxs-calendar'></i>in last 30 days</p>
+								</div>
+								<div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+								</div>
+							</div>
+						</div>
+						<div class="product-list p-3 mb-3">
+							<div class="row border mx-0 mb-3 py-2 radius-10 cursor-pointer">
+								<div class="col-sm-6">
+									<div class="d-flex align-items-center">
+										<div class="product-img">
+											<img src="{% static 'assets/images/icons/chair.png' %}" alt="" />
+										</div>
+										<div class="ms-2">
+											<h6 class="mb-1">Finance 101</h6>
+											<p class="mb-0">Code Name</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm">
+									<h6 class="mb-1">Top Secret</h6>
+									<p class="mb-0">Classification</p>
+								</div>
+								<div class="col-sm">
+									<div id="chart5"></div>
+								</div>
+							</div>
+							<div class="row border mx-0 mb-3 py-2 radius-10 cursor-pointer">
+								<div class="col-sm-6">
+									<div class="d-flex align-items-center">
+										<div class="product-img">
+											<img src="{% static 'assets/images/icons/user-interface.png' %}" alt="" />
+										</div>
+										<div class="ms-2">
+											<h6 class="mb-1">Military Document</h6>
+											<p class="mb-0">Code Name</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm">
+									<h6 class="mb-1">Top Secret</h6>
+									<p class="mb-0">Classification</p>
+								</div>
+								<div class="col-sm">
+									<div id="chart6"></div>
+								</div>
+							</div>
+							<div class="row border mx-0 mb-3 py-2 radius-10 cursor-pointer">
+								<div class="col-sm-6">
+									<div class="d-flex align-items-center">
+										<div class="product-img">
+											<img src="{% static 'assets/images/icons/watch.png' %}" alt="" />
+										</div>
+										<div class="ms-2">
+											<h6 class="mb-1">Oil Deal With United States</h6>
+											<p class="mb-0">Code Name</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm">
+									<h6 class="mb-1">Top Secret</h6>
+									<p class="mb-0">Classification</p>
+								</div>
+								<div class="col-sm">
+									<div id="chart7"></div>
+								</div>
+							</div>
+							<div class="row border mx-0 mb-3 py-2 radius-10 cursor-pointer">
+								<div class="col-sm-6">
+									<div class="d-flex align-items-center">
+										<div class="product-img">
+											<img src="{% static 'assets/images/icons/idea.png' %}" alt="" />
+										</div>
+										<div class="ms-2">
+											<h6 class="mb-1">Presidential Security Brief</h6>
+											<p class="mb-0">Code Name</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm">
+									<h6 class="mb-1">Top Secret</h6>
+									<p class="mb-0">Classification</p>
+								</div>
+								<div class="col-sm">
+									<div id="chart8"></div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--end row-->
+
+			<div class="row row-cols-1 row-cols-lg-3">
+				<div class="col d-flex">
+					<div class="card radius-10 w-100">
+						<div class="card-body">
+							<div class="d-flex align-items-center">
+								<div>
+									<h5 class="mb-0">Top Secret Files</h5>
+								</div>
+								<div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+								</div>
+							</div>
+							<div class="mt-5" id="chart15"></div>
+						</div>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item d-flex bg-transparent justify-content-between align-items-center">Director Generals <span class="badge bg-light-white-2 rounded-pill">25</span>
+							</li>
+							<li class="list-group-item d-flex bg-transparent justify-content-between align-items-center">Ministers <span class="badge bg-light-white-3 rounded-pill">10</span>
+							</li>
+							<li class="list-group-item d-flex bg-transparent justify-content-between align-items-center">Staff Officers <span class="badge bg-white rounded-pill text-dark">65</span>
+							</li>
+							<li class="list-group-item d-flex bg-transparent justify-content-between align-items-center">PGs <span class="badge bg-light-white-4 text-white rounded-pill">14</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col d-flex">
+					<div class="card radius-10 w-100">
+						<div class="card-body">
+							<p class="font-weight-bold mb-1">Platform Users</p>
+							<div class="d-flex align-items-center">
+								<div>
+									<h4 class="mb-0">43,540</h4>
+								</div>
+								<div class="">
+									<p class="mb-0 align-self-center font-weight-bold ms-2">4.4 <i class='bx bxs-up-arrow-alt mr-2'></i>
+									</p>
+								</div>
+							</div>
+							<div id="chart21"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col d-flex">
+					<div class="card radius-10 w-100 overflow-hidden">
+						<div class="card-body">
+							<div class="d-flex align-items-center">
+								<div>
+									<h5 class="mb-0">Encryption Overview</h5>
+								</div>
+								<div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i>
+								</div>
+							</div>
+							<div class="mt-5" id="chart20"></div>
+						</div>
+						<div class="card-footer bg-transparent border-top-0">
+							<div class="d-flex align-items-center justify-content-between text-center">
+								<div>
+									<h6 class="mb-1 font-weight-bold">256</h6>
+									<p class="mb-0">Last Week</p>
+								</div>
+								<div class="mb-1">
+									<h6 class="mb-1 font-weight-bold">2251</h6>
+									<p class="mb-0">Last Month</p>
+								</div>
+								<div>
+									<h6 class="mb-1 font-weight-bold">9856</h6>
+									<p class="mb-0">Last Year</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--end row-->
+
+{% endblock %}
+
+{% block extra_script %}
+	<script src="{% static 'assets/js/dashboard-eCommerce.js' %}"></script>
+	<script>
+		$(document).ready(function() {
+			$('#Transaction-History').DataTable({
+				lengthMenu: [[6, 10, 20, -1], [6, 10, 20, 'Todos']]
+			})
+		  } )
+	</script>
+	<script>
+		new PerfectScrollbar('.product-list')
+		new PerfectScrollbar('.customers-list')
+	</script>
+{% endblock %}

@@ -1,0 +1,186 @@
+{% extends 'blank.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link href="{% static 'assets/css/fancy_fileupload.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/imageuploadify.min.css' %}" rel="stylesheet" />
+
+    <link href="{% static 'assets/plugins/select2/css/select2.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/plugins/select2/css/select2-bootstrap4.css' %}" rel="stylesheet" />
+
+{% endblock %}
+{% block title %}
+	<title>CYBER | Upload Document</title>
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+        <div class="breadcrumb-title pe-3">Upload</div>
+        <div class="ps-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 p-0">
+                    <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Documents</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="ms-auto">
+            <div class="btn-group">
+                <button type="button" class="btn btn-light">Settings</button>
+                <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="javascript:;">Action</a>
+                    <a class="dropdown-item" href="javascript:;">Another action</a>
+                    <a class="dropdown-item" href="javascript:;">Something else here</a>
+                    <div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end breadcrumb-->
+<form class="needs-validation" novalidate action="#" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+    <div class="row">
+        <div class="col-xl-9 mx-auto">
+            <h6 class="mb-0 text-uppercase">Select Document</h6>
+            <hr>
+            <div class="card">
+                <div class="card-body">
+                    <input id="fancy-file-upload" type="file" name="document" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-9 mx-auto">
+            <h6 class="mb-0 text-uppercase">Document Details</h6>
+            <hr/>
+            <div class="card">
+                <div class="card-body">
+                    <div class="p-4 border rounded">
+                        <div class="row g-3 " >
+                            <div class="col-md-4">
+                                <label for="validationCustom01" class="form-label">Document name</label>
+                                <input type="text" name="document_name" class="form-control" id="validationCustom01" value="" required>
+                                <div class="valid-feedback">Looks good!</div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" name="encryption_type" type="radio" value="shared_secret" id="shared_secret" required>
+                                    <label class="form-check-label" for="shared_secret">Shared Secret</label>
+                                    <div class="invalid-feedback">You must agree before submitting.</div>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" name="encryption_type"  type="radio" value="single_secret" id="single_secret" required>
+                                    <label class="form-check-label" for="single_secret">Single Secret</label>
+                                    <div class="invalid-feedback">You must agree before submitting.</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="validationCustom04" class="form-label">Number of Secret</label>
+                                <select class="form-select" name="no_of_secrets" id="validationCustom04" required>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3" selected>3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a valid number.</div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="validationCustom06" class="form-label">Required Secrets to Unlock</label>
+                                <select class="form-select" name="unlock_secrets" id="validationCustom06" required>
+                                    <option selected disabled value="" >Choose...</option>
+                                    <option value="1">1</option>
+                                    <option value="2" selected>2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a valid number.</div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="validationCustom05" class="form-label">Secret Holders</label>
+                                <select class="form-select multiple-select" name="secret_holders" id="validationCustom05" multiple required>
+                                    <option disabled value="">Choose...</option>
+                                    {% for user in all_users%}
+                                        <option value="{{user.id}}">{{user.surname}} {{user.first_name}}</option>
+                                    {% endfor %}
+
+\
+                                </select>
+                                <div class="invalid-feedback">Please select a valid share holder.</div>
+                            </div>
+
+                            <div class="col-12">
+                                <button class="btn btn-light" type="submit">Submit form</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_script %}
+    <script src="{% static 'assets/js/jquery.ui.widget.js' %}" > </script>
+    <script src="{% static 'assets/js/jquery.fileupload.js' %}" > </script>
+    <script src="{% static 'assets/js/jquery.iframe-transport.js' %}" > </script>
+    <script src="{% static 'assets/plugins/select2/js/select2.min.js' %}" > </script>
+
+    <script>
+		// Example starter JavaScript for disabling form submissions if there are invalid fields
+			(function () {
+			  'use strict'
+
+			  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+			  var forms = document.querySelectorAll('.needs-validation')
+
+			  // Loop over them and prevent submission
+			  Array.prototype.slice.call(forms)
+				.forEach(function (form) {
+				  form.addEventListener('submit', function (event) {
+					if (!form.checkValidity()) {
+					  event.preventDefault()
+					  event.stopPropagation()
+					}
+
+					form.classList.add('was-validated')
+				  }, false)
+				})
+			})()
+	</script>
+
+    <script>
+		$('.single-select').select2({
+			theme: 'bootstrap4',
+			width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+			placeholder: $(this).data('placeholder'),
+			allowClear: Boolean($(this).data('allow-clear')),
+		});
+		$('.multiple-select').select2({
+			theme: 'bootstrap4',
+			width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+			placeholder: $(this).data('placeholder'),
+			allowClear: Boolean($(this).data('allow-clear')),
+		});
+	</script>
+<!--    <script src="{% static 'assets/js/jquery.fancy-fileupload.js' %}" > </script>-->
+<!--    <script src="{% static 'assets/js/imageuploadify.min.js' %}" > </script>-->
+
+<!--    <script>-->
+<!--		$('#fancy-file-upload').FancyFileUpload({-->
+<!--			params: {-->
+<!--				action: 'fileuploader'-->
+<!--			},-->
+<!--			maxfilesize: 15000000,-->
+<!--            url : '/features/upload/',-->
+<!--            retries : 0,-->
+<!--            recordaudio : true,-->
+<!--            recordvideo : true,-->
+
+<!--		});-->
+<!--	</script>-->
+
+{% endblock %}
