@@ -117,6 +117,13 @@
     <script src="{% static 'assets/js/jquery.iframe-transport.js' %}" > </script>
     <script src="{% static 'assets/plugins/select2/js/select2.min.js' %}" > </script>
 
+    {% if error_message %}
+        <script>
+            error_noti('{{error_message}}')
+        </script>
+    {% endif %}
+
+
     <script>
 		// Example starter JavaScript for disabling form submissions if there are invalid fields
 			(function () {

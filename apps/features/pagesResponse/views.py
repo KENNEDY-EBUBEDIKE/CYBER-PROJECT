@@ -10,6 +10,7 @@ user_model = apps.get_model("users", "User")
 
 @login_required()
 def upload_file(request):
+    all_users = user_model.objects.all()
     if request.method == "POST":
         no_of_secrets = int(request.POST.get('no_of_secrets'))
         unlock_secrets = int(request.POST.get('unlock_secrets'))
@@ -53,10 +54,13 @@ def upload_file(request):
             new_key.file = new_document
             new_key.save()
         else:
-            print("Invalid Config")
-            return redirect('upload_file')
+            return render(request, 'upload-documents.html', {
+                'all_users': all_users,
+                'error_message':
+                    "Num of Secrets must be => Num of Required Unlock secrets."
+            })
         return redirect('vault')
-    all_users = user_model.objects.all()
+
     return render(request, 'upload-documents.html', {'all_users': all_users})
 
 
@@ -70,9 +74,3 @@ def vault(request):
 def user_shared_secrets(request):
     secrets = request.user.shared_secrets.all()
     return render(request, 'shared_secrets.html', {'secrets': secrets})
-
-
-@login_required()
-def public_keys(request):
-    pairs = RSAKeyPair.objects.all()
-    return render(request, 'public-keys.html', {'keys': pairs})
