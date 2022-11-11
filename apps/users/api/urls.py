@@ -5,6 +5,7 @@ from .views import update_profile_picture
 
 urlpatterns = [
     path('update-photo/', update_profile_picture, name='api-update_profile_picture'),
+
 ]
 
 

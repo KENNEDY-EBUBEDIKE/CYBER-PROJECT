@@ -2,13 +2,13 @@
 <html lang="en">
 {% load static %}
 	
-<!-- Mirrored from codervent.com/mons/dashtreme/demo/vertical/authentication-signup.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 03 Nov 2022 20:05:14 GMT -->
 <head>
 		<!-- Required meta tags -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!--favicon-->
 		<link rel="icon" href="{% static 'assets/images/favicon-32x32.png' %}" type="image/png">
+		<link href="{% static 'assets/plugins/notifications/css/lobibox.min.css' %}" rel="stylesheet" />
 		<!-- loader-->
 		<link href="{% static 'assets/css/pace.min.css' %}" rel="stylesheet">
 		<script src="{% static 'assets/js/pace.min.js' %}"></script>
@@ -30,19 +30,7 @@
 						<div class="my-4 text-center">
 							<img src="{% static 'assets/images/logo-img.png' %}" width="180" alt>
 						</div>
-						{% if error_message %}
-							<div class="alert border-0 border-start border-5 border-white alert-dismissible fade show py-2">
-									<div class="d-flex align-items-center">
-										<div class="font-35 text-white"><i class='bx bxs-message-square-x'></i>
-										</div>
-										<div class="ms-3">
-											<h6 class="mb-0 text-white">Danger Alerts</h6>
-											<div> {{error_message}} </div>
-										</div>
-									</div>
-									<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-								</div>
-						{% endif %}
+
 						<div class="card">
 							<div class="card-body">
 								<div class="border p-4 rounded">
@@ -156,6 +144,28 @@
 
 	<!--plugins-->
 	<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+	<!--notification js -->
+	<script src="{% static 'assets/plugins/notifications/js/lobibox.min.js' %}"></script>
+	<script src="{% static 'assets/plugins/notifications/js/notifications.min.js' %}"></script>
+	<script src="{% static 'assets/plugins/notifications/js/notification-custom-script.js' %}"></script>
+
+
+	<script>
+		function error_noti(msg) {
+			Lobibox.notify('error', {
+				pauseDelayOnHover: true,
+				continueDelayOnInactiveTab: false,
+				position: 'top right',
+				icon: 'bx bx-x-circle',
+				msg: msg
+			});
+		}
+	</script>
+
+	{% if error_message %}
+		<script> error_noti('{{error_message}}') </script>
+	{% endif %}
+
 	
 	<script>
 		$(document).ready(function () {
@@ -262,5 +272,4 @@
 </body>
 
 
-<!-- Mirrored from codervent.com/mons/dashtreme/demo/vertical/authentication-signup.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 03 Nov 2022 20:05:14 GMT -->
 </html>

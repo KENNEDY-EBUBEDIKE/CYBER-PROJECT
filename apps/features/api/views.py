@@ -4,10 +4,12 @@ from rest_framework import status
 from django.contrib.auth.decorators import login_required
 from apps.features.models import Vault, RSAKeyPair
 import time
+from django.contrib.auth import get_user_model
 from binascii import hexlify, unhexlify
 from django.db import IntegrityError
 from utilities.cryptography import generate_shared_secret,\
     encrypt_file, retrieve_shared_key, decrypt_file, generate_rsa_key_pair
+User = get_user_model()
 
 
 @api_view(["POST"])
@@ -129,28 +131,91 @@ def delete_file(request):
 @login_required()
 def generate_key_pair(request):
     if request.method == "POST":
-        size = int(request.data.get('size'))
-        private_key, public_key = generate_rsa_key_pair(size)
-
-        new_pair = RSAKeyPair.objects.generate(
-            name=request.user.username,
-            owner=request.user,
-            public_key=public_key,
-            private_key=private_key,
-        )
         try:
-            new_pair.save()
-        except IntegrityError:
+            if bool(request.user.key_pair):
+                return Response(
+                    data={
+                        "success": False,
+                        'error': "Key Pair Exist For this account!"
+                    },
+                    status=status.HTTP_200_OK,
+                )
+        except User.key_pair.RelatedObjectDoesNotExist:
+
+            size = int(request.data.get('size'))
+            private_key, public_key = generate_rsa_key_pair(size)
+            try:
+                new_pair = RSAKeyPair.objects.generate(
+                    name=request.user.username,
+                    owner=request.user,
+                    public_key=public_key,
+                    private_key=private_key,
+                )
+
+                new_pair.save()
+            except IntegrityError:
+                return Response(
+                    data={
+                        "success": False,
+                        'error': "Key Pair Exist For this account!"
+                    },
+                    status=status.HTTP_200_OK,
+                )
+
             return Response(
                 data={
-                    "success": False,
+                    "success": True,
+                    'message': "Key Pair Generated Successfully"
                 },
                 status=status.HTTP_200_OK,
             )
 
+
+@api_view(["GET"])
+@login_required()
+def delete_key_pair(request):
+    try:
+        pair = request.user.key_pair
+        pair.delete_key_pair()
         return Response(
             data={
                 "success": True,
+                'message': "Public and Private Key Pair Successfully Deleted",
             },
             status=status.HTTP_200_OK,
+
         )
+    except User.key_pair.RelatedObjectDoesNotExist:
+        return Response(
+            data={
+                "success": False,
+                'error': "You have no key Pair! Please Generate"
+            },
+            status=status.HTTP_200_OK,
+
+        )
+
+
+@api_view(["GET"])
+@login_required()
+def download_private_key(request):
+    try:
+        key_pair = request.user.key_pair
+        return Response(
+            data={
+                "success": True,
+                "pri_key": key_pair.private_key.url,
+                'message': "Successful"
+            },
+            status=status.HTTP_200_OK,
+
+        )
+    except User.key_pair.RelatedObjectDoesNotExist:
+        return Response(
+                data={
+                    "success": False,
+                    'error': "You have no key Pair! Please Generate"
+                },
+                status=status.HTTP_200_OK,
+
+            )

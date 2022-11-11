@@ -68,10 +68,15 @@ def register(request):
             new_user.first_name = first_name
             new_user.surname = surname
             new_user.appointment = appointment
-            new_user.photo = photo
+
+            if not photo:
+                raise ValueError("A profile Photo is Required!")
+            else:
+                new_user.photo = photo
+
             new_user.save()
-        except IntegrityError as e:
-            return redirect("/users/register", {'error_message': e})
+        except (IntegrityError, ValueError) as e:
+            return render(request, "authentication-signup.html", {'error_message': e})
         return redirect("/users/dashboard")
     else:
         return render(request, "authentication-signup.html")

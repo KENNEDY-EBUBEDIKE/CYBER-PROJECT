@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.urls import reverse
+import os
+from django.db import IntegrityError
 
 
 class UserProfileManager(BaseUserManager):
@@ -14,7 +16,10 @@ class UserProfileManager(BaseUserManager):
         email = self.normalize_email(email)  # normalizing the email
         user = self.model(email=email, username=username)  # creating user
         user.set_password(password)  # making the password hashed
-        user.save(using=self._db)  # saving the user object
+        try:
+            user.save(using=self._db)  # saving the user object
+        except IntegrityError:
+            raise IntegrityError('User with this Email Already Exists!!')
 
         return user
 
@@ -56,7 +61,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
+    def update_profile_photo(self, photo):
+        if self.photo:
+            os.remove(self.photo.path)
+        self.photo = photo
+
     class Meta:
         ordering = ('username',)
-
-

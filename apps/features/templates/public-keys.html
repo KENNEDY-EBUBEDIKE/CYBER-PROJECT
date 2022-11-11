@@ -15,7 +15,6 @@
 							<h5 class="mb-1">Public Keys</h5>
 							<p class="mb-0 font-13"><i class='bx bxs-calendar'></i>In Recent Days</p>
 						</div>
-						<div class="ms-lg-5"><button data-bs-toggle="modal" data-bs-target="#KeyGenModal" class="btn btn-success">Generate Key Pair</button></div>
 						<div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i></div>
 					</div>
 					<div class="table-responsive mt-4">
@@ -58,42 +57,7 @@
 		</div>
 	</div>
 	<!--end row-->
-	<div class="modal fade" id="KeyGenModal" tabindex="-1" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Generate Key Pair</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
 
-				<div class="card border-top border-0 border-4 border-white">
-					<div class="card-body p-5">
-						<div class="card-title text-center"><i class="bx bxs-lock-alt text-white font-50"></i>
-							<h5 class="mb-5 mt-2 text-white">Generate</h5>
-						</div>
-						<hr>
-						<form method="POST" action="{% url 'api-generate_key_pair' %}" class="row g-3" id="keyGenForm"> {% csrf_token %}
-
-							<div class="col-md-4">
-								<label for="inputsize" class="form-label">Key Size</label>
-								<select id="inputsize" class="form-select" name="size">
-									<option selected>Key Size</option>
-									<option>1024</option>
-									<option>2048</option>
-									<option>4096</option>
-									<option>8192</option>
-								</select>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-								<button type="submit" class="btn btn-success">Generate</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 {% endblock %}
 
 {% block extra_script %}

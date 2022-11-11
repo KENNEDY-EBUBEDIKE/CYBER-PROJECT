@@ -9,13 +9,14 @@ from django.contrib.auth.decorators import login_required
 def update_profile_picture(request):
     if request.data['photo']:
         user = request.user
-        user.photo = request.data['photo']
+        user.update_profile_photo(request.data['photo'])
         user.save()
 
         return Response(
             data={
                 "success": True,
-                "photo": user.photo.url
+                "photo": user.photo.url,
+                "message": "Photo updated Successfully"
             },
             status=status.HTTP_200_OK,
 
