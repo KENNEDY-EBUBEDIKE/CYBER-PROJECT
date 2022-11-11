@@ -191,7 +191,7 @@
 				mode: 'same-origin',
 				success: function (response){
 					if (response.success){
-						alert("Deleted")
+						success_noti(response.message)
 						window.location.reload()
 					}
 				},
@@ -199,7 +199,6 @@
 		}
 
 		lock_back = (id)=>{
-			console.log("Called")
 			$.ajax({
 				url: "/api/features/done/",
 				type: 'POST',
@@ -241,11 +240,11 @@
 					if (response.success){
 						lock_back(id)
 						$('#secretCollectionModal').modal('hide');
-						alert(response.message)
+						success_noti(response.message)
 						window.open(response.file, '_blank');
 
 					}else{
-						alert(response.message)
+						error_noti(response.message)
 					}
 				},
 			})

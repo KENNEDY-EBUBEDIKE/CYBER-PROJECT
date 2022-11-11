@@ -45,7 +45,7 @@ def decrypt(request):
                 doc.save()
             else:
                 file = doc
-        except ObjectDoesNotExist:
+        except Vault.DoesNotExist:
             return Response(
                 data={
                     "success": False,
@@ -122,6 +122,7 @@ def delete_file(request):
     return Response(
         data={
             "success": True,
+            "message": "File Deleted"
         },
         status=status.HTTP_200_OK,
     )
