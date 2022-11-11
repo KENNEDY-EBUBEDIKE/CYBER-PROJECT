@@ -53,9 +53,9 @@
 										</td>
 										<td>
 											<div class="d-flex order-actions">
-												<a href="javascript:" onclick="getId({{doc.id}})" data-bs-toggle="modal" data-bs-target="#secretCollectionModal" id="decrypt"><i class="bx bx-code"></i></a>
-												<a href="javascript:"  onclick="dwnd({{doc.id}})" class="ms-4" id="download"><i class='bx bxs-download'></i></a>
-												<a href="javascript:" onclick="delete_file({{doc.id}})" class="ms-4" id="delete"><i class='bx bxs-trash'></i></a>
+												<a href="javascript:" onclick="getId('{{doc.id}}')" data-bs-toggle="modal" data-bs-target="#secretCollectionModal" id="decrypt"><i class="bx bx-code"></i></a>
+												<a href="javascript:"  onclick="dwnd('{{doc.id}}')" class="ms-4" id="download"><i class='bx bxs-download'></i></a>
+												<a href="javascript:" onclick="delete_file('{{doc.id}}')" class="ms-4" id="delete"><i class='bx bxs-trash'></i></a>
 											</div>
 										</td>
 									</tr>
@@ -185,7 +185,7 @@
 			$.ajax({
 				url: "/api/features/delete/",
 				type: 'DELETE',
-				data: {"id": id,},
+				data: {"id": parseInt(id),},
 				dataType: "json",
 				headers: {'X-CSRFToken': csrftoken},
 				mode: 'same-origin',
@@ -228,7 +228,6 @@
 				url: "/api/features/decrypt/",
 				type: 'POST',
 				data: JSON.stringify({
-					"id": id,
 					"secrets": secs,
 					"indices": indices,
 				}),
@@ -238,7 +237,7 @@
 				contentType: "application/json; charset=utf-8",
 				success: function (response){
 					if (response.success){
-						lock_back(id)
+						lock_back(parseInt(id))
 						$('#secretCollectionModal').modal('hide');
 						success_noti(response.message)
 						window.open(response.file, '_blank');

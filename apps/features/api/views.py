@@ -15,7 +15,7 @@ User = get_user_model()
 @api_view(["POST"])
 @login_required()
 def download(request):
-    doc = Vault.objects.get(id=request.data.get("id"))
+    doc = Vault.objects.get(id=int(request.data.get("id")))
 
     return Response(
         data={

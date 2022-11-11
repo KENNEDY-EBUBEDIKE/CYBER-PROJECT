@@ -19,7 +19,7 @@ class UserProfileManager(BaseUserManager):
         try:
             user.save(using=self._db)  # saving the user object
         except IntegrityError:
-            raise IntegrityError('User with this Email Already Exists!!')
+            raise IntegrityError('Email or Username Already Exists!!')
 
         return user
 
