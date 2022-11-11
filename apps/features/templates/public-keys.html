@@ -1,0 +1,129 @@
+{% extends 'blank.html' %}
+{% block title %}
+	<title>CYBER | Public Keys</title>
+{% endblock %}
+
+{% block content %}
+{% load static %}
+
+	<div class="row"> {% csrf_token %}
+		<div class="col-xl-12 d-flex">
+			<div class="card radius-10 w-100">
+				<div class="card-body">
+					<div class="d-flex align-items-center">
+						<div>
+							<h5 class="mb-1">Public Keys</h5>
+							<p class="mb-0 font-13"><i class='bx bxs-calendar'></i>In Recent Days</p>
+						</div>
+						<div class="ms-lg-5"><button data-bs-toggle="modal" data-bs-target="#KeyGenModal" class="btn btn-success">Generate Key Pair</button></div>
+						<div class="font-22 ms-auto"><i class='bx bx-dots-horizontal-rounded'></i></div>
+					</div>
+					<div class="table-responsive mt-4">
+						<table class="table align-middle mb-0 table-hover" id="Transaction-History">
+							<thead class="table-light">
+								<tr>
+									<th>Key Owned By</th>
+									<th>Key Type</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for public_key in keys %}
+
+									<tr>
+										<td>
+											<div class="d-flex align-items-center">
+												<div class="">
+													<img src="{{public_key.owner.photo.url}}" class="rounded-circle" width="46" height="46" alt="" />
+												</div>
+												<div class="ms-2">
+													<h6 class="mb-1 font-14">{{public_key.owner.surname}}  {{public_key.owner.first_name}}</h6>
+													<p class="mb-0 font-13">Reference Id #8547846</p>
+												</div>
+											</div>
+										</td>
+										<td> Public </td>
+										<td>
+											<div class="d-flex order-actions">
+												<a href="javascript:" class="" id="show-secret"><i class="bx bx-show"></i></a>
+											</div>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--end row-->
+	<div class="modal fade" id="KeyGenModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Generate Key Pair</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+
+				<div class="card border-top border-0 border-4 border-white">
+					<div class="card-body p-5">
+						<div class="card-title text-center"><i class="bx bxs-lock-alt text-white font-50"></i>
+							<h5 class="mb-5 mt-2 text-white">Generate</h5>
+						</div>
+						<hr>
+						<form method="POST" action="{% url 'api-generate_key_pair' %}" class="row g-3" id="keyGenForm"> {% csrf_token %}
+
+							<div class="col-md-4">
+								<label for="inputsize" class="form-label">Key Size</label>
+								<select id="inputsize" class="form-select" name="size">
+									<option selected>Key Size</option>
+									<option>1024</option>
+									<option>2048</option>
+									<option>4096</option>
+									<option>8192</option>
+								</select>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+								<button type="submit" class="btn btn-success">Generate</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block extra_script %}
+
+	<script>
+		$(document).ready(function() {
+			$('#Transaction-History').DataTable({
+				lengthMenu: [[6, 10, 20, -1], [6, 10, 20, 'Todos']]
+			})
+		  } )
+	</script>
+
+    <script>
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    </script>
+    <script>
+        $(document).ready(function () {
+			$("#show-secret").on('click', function (event) {
+				event.preventDefault()
+				if ($('#secret input').attr("type") == "text") {
+					$('#secret input').attr('type', 'password')
+					$('#show-secret i').addClass("bx-hide")
+					$('#show-secret i').removeClass("bx-show")
+				} else if ($('#secret input').attr("type") == "password") {
+					$('#secret input').attr('type', 'text')
+					$('#show-secret i').removeClass("bx-hide")
+					$('#show-secret i').addClass("bx-show")
+				}
+			})
+		})
+    </script>
+
+{% endblock %}

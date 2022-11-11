@@ -1,6 +1,6 @@
 from django.urls import path
 from django.conf import settings
-from .views import download, delete_file, decrypt, done
+from .views import download, delete_file, decrypt, done, generate_key_pair
 
 urlpatterns = [
 
@@ -8,6 +8,7 @@ urlpatterns = [
     path('delete/', delete_file, name='api-delete_file'),
     path('decrypt/', decrypt, name='api-decrypt'),
     path('done/', done, name='api-done'),
+    path('generate-key-pair/', generate_key_pair, name='api-generate_key_pair'),
 ]
 
 

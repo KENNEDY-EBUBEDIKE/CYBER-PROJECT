@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf import settings
 from django.contrib.auth import views as auth_view
-from .views import login_view, admin_dashboard, register
+from .views import login_view, admin_dashboard, register, user_profile
 
 urlpatterns = [
     path('', admin_dashboard, name='dashboard'),
@@ -10,7 +10,8 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('logout/', auth_view.LogoutView.as_view(), name='logout'),
 
-    path('register/', register, name='register')
+    path('register/', register, name='register'),
+    path('user-profile/', user_profile, name='user_profile')
 ]
 
 if settings.DEBUG:

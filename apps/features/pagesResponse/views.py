@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
 from binascii import hexlify
-from apps.features.models import Vault, SharedSecret, LockKey
+from apps.features.models import Vault, SharedSecret, LockKey, RSAKeyPair
 from utilities.cryptography import generate_shared_secret, encrypt_file
 
 user_model = apps.get_model("users", "User")
@@ -70,3 +70,9 @@ def vault(request):
 def user_shared_secrets(request):
     secrets = request.user.shared_secrets.all()
     return render(request, 'shared_secrets.html', {'secrets': secrets})
+
+
+@login_required()
+def public_keys(request):
+    pairs = RSAKeyPair.objects.all()
+    return render(request, 'public-keys.html', {'keys': pairs})

@@ -2,10 +2,12 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from django.contrib.auth.decorators import login_required
-from utilities.cryptography import generate_shared_secret, encrypt_file, retrieve_shared_key, decrypt_file
-from apps.features.models import Vault
+from apps.features.models import Vault, RSAKeyPair
 import time
 from binascii import hexlify, unhexlify
+from django.db import IntegrityError
+from utilities.cryptography import generate_shared_secret,\
+    encrypt_file, retrieve_shared_key, decrypt_file, generate_rsa_key_pair
 
 
 @api_view(["POST"])
@@ -121,3 +123,34 @@ def delete_file(request):
         },
         status=status.HTTP_200_OK,
     )
+
+
+@api_view(["POST"])
+@login_required()
+def generate_key_pair(request):
+    if request.method == "POST":
+        size = int(request.data.get('size'))
+        private_key, public_key = generate_rsa_key_pair(size)
+
+        new_pair = RSAKeyPair.objects.generate(
+            name=request.user.username,
+            owner=request.user,
+            public_key=public_key,
+            private_key=private_key,
+        )
+        try:
+            new_pair.save()
+        except IntegrityError:
+            return Response(
+                data={
+                    "success": False,
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        return Response(
+            data={
+                "success": True,
+            },
+            status=status.HTTP_200_OK,
+        )

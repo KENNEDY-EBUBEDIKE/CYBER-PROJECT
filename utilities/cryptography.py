@@ -2,7 +2,9 @@ from Crypto.Protocol.SecretSharing import Shamir
 from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES
 from Crypto.Protocol.KDF import PBKDF2
+from Crypto.PublicKey import RSA
 from binascii import hexlify, unhexlify
+from decouple import config
 
 
 def generate_shared_secret(required_share, share_split):
@@ -47,3 +49,21 @@ def decrypt_file(file, key):
     open(file_name, "wb").write(decrypted_content)
 
     return file
+
+
+def generate_rsa_key_pair(size):
+    key_pair = RSA.generate(size)  # generate an RSA key of specified size in bits
+
+    project_secret_key = config('SECRET_KEY')
+
+    # extracting the public_key
+    public_key = key_pair.publickey().export_key()
+
+    # extracting the private key in encoded form
+    private_key = key_pair.export_key(
+        passphrase=project_secret_key,
+        pkcs=8,
+        protection="PBKDF2WithHMAC-SHA1AndAES256-CBC"
+    )
+
+    return private_key, public_key

@@ -90,13 +90,29 @@
 						</li>
 						<li> <a href="#"><i class="bx bx-right-arrow-alt"></i>My Digital Signatures</a>
 						</li>
-						<li> <a href="#"><i class="bx bx-right-arrow-alt"></i>Public Keys</a>
+						<li>
+							<a class="has-arrow" href="javascript:">
+								<div class="parent-icon"><i class="bx bx-menu"></i></div>
+								<div class="menu-title">PKI</div>
+							</a>
+
+							<ul>
+								<li>
+									<a href="#"><i class="bx bx-right-arrow-alt"></i>Generate Key Pair</a>
+								</li>
+								<li>
+									<a href="{% url 'public_keys' %}"><i class="bx bx-right-arrow-alt"></i>Public Keys</a>
+								</li>
+								<li>
+									<a href="#"><i class="bx bx-right-arrow-alt"></i>My Private Key</a>
+								</li>
+							</ul>
 						</li>
 					</ul>
 				</li>
 				<li class="menu-label">Other Features</li>
 				<li>
-					<a href="#">
+					<a href="{% url 'user_profile' %}">
 						<div class="parent-icon"><i class="bx bx-user-circle"></i>
 						</div>
 						<div class="menu-title">My Profile</div>
@@ -120,9 +136,12 @@
 					<div class="mobile-toggle-menu"><i class="bx bx-menu"></i>
 					</div>
 					<div class="search-bar flex-grow-1">
-						<div class="position-relative search-bar-box">
-							<input type="text" class="form-control search-control" placeholder="Type to search..."> <span class="position-absolute top-50 search-show translate-middle-y"><i class="bx bx-search"></i></span>
+						<div class="position-relative search-bar-box">`
+
+							<input type="text" id="search" class="form-control search-control" placeholder="Type to search..."> <span class="position-absolute top-50 search-show translate-middle-y"><i class="bx bx-search"></i></span>
 							<span class="position-absolute top-50 search-close translate-middle-y"><i class="bx bx-x"></i></span>
+
+							<label for="search"></label>
 						</div>
 					</div>
 					<div class="top-menu ms-auto">
@@ -316,7 +335,7 @@
 					<div class="user-box dropdown">
 						<a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 							{% if request.user.photo%}
-								<img src="{{request.user.photo.url}}" class="user-img" alt="user avatar">
+								<img src="{{request.user.photo.url}}" id="user_photo" class="user-img" alt="user avatar">
 
 							{% else %}
 								<img src="{% static 'assets/images/avatars/avatar-2.png' %}" class="user-img" alt="user avatar">
@@ -327,11 +346,11 @@
 							</div>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end">
-							<li><a class="dropdown-item" href="javascript:"><i class="bx bx-user"></i><span>Profile</span></a>
+							<li><a class="dropdown-item" href="{% url 'user_profile' %}"><i class="bx bx-user"></i><span>Profile</span></a>
 							</li>
 							<li><a class="dropdown-item" href="javascript:"><i class="bx bx-cog"></i><span>Settings</span></a>
 							</li>
-							<li><a class="dropdown-item" href="javascript:"><i class="bx bx-home-circle"></i><span>Dashboard</span></a>
+							<li><a class="dropdown-item" href="{% url 'dashboard' %}"><i class="bx bx-home-circle"></i><span>Dashboard</span></a>
 							</li>
 							<li>
 								<div class="dropdown-divider mb-0"></div>

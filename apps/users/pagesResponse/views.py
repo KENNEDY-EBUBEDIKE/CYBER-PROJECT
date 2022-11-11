@@ -75,3 +75,8 @@ def register(request):
         return redirect("/users/dashboard")
     else:
         return render(request, "authentication-signup.html")
+
+
+@login_required()
+def user_profile(request):
+    return render(request, "user-profile.html")

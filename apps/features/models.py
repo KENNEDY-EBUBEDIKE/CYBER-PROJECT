@@ -1,5 +1,7 @@
 from django.db import models
 import os
+import io
+from django.core.files import File
 from django.db import IntegrityError
 
 
@@ -55,7 +57,7 @@ class VaultManager(models.Manager):
 class Vault(models.Model):
     name = models.CharField(max_length=255, unique=True, null=False, blank=False, default="File")
     uploaded_by = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='vault_documents')
-    document = models.FileField(upload_to='file/', null=False)
+    document = models.FileField(upload_to='file/encrypted', null=False)
     status = models.CharField(max_length=255, null=False, blank=False, default="Encrypted With shared Secret")
     req_unlock = models.IntegerField(blank=False, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -63,7 +65,6 @@ class Vault(models.Model):
     objects = VaultManager()
 
     def delete_file(self):
-        # os.remove(os.path.join(settings.MEDIA_ROOT, self.document.name))
         self.delete()
         os.remove(self.document.path)
         return "SUCCESS"
@@ -78,3 +79,36 @@ class LockKey(models.Model):
 
     def __str__(self):
         return self.file
+
+
+class RSAKeyPairManager(models.Manager):
+    def generate(self, name, owner, public_key, private_key):
+
+        new_pair = self.model(
+            name=name,
+            owner=owner,
+            public_key=File(io.BytesIO(public_key), name=f'{name}"_public.pem"'),
+            private_key=File(io.BytesIO(private_key), name=f'{name}"_private.pem"'),
+        )
+
+        new_pair.save(using=self._db)
+
+        return new_pair
+
+
+class RSAKeyPair(models.Model):
+    name = models.CharField(max_length=255)
+    owner = models.OneToOneField('users.User', on_delete=models.CASCADE, unique=True, related_name='key_pair')
+    public_key = models.FileField(upload_to='file/public-keys/', null=False)
+    private_key = models.FileField(upload_to='file/private-keys/', null=False)
+
+    objects = RSAKeyPairManager()
+
+    def delete_key_pair(self):
+        self.delete()
+        os.remove(self.public_key.path)
+        os.remove(self.private_key.path)
+        return "SUCCESS"
+
+    def __str__(self):
+        return self.name
