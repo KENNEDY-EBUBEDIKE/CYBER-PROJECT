@@ -15,6 +15,7 @@ User = get_user_model()
 @api_view(["POST"])
 @login_required()
 def download(request):
+    time.sleep(2)
     doc = Vault.objects.get(id=int(request.data.get("id")))
 
     return Response(
@@ -30,6 +31,7 @@ def download(request):
 @api_view(["POST"])
 @login_required()
 def decrypt(request):
+    time.sleep(2)
     secs = request.data["secrets"]
     indices = request.data["indices"]
 
@@ -117,6 +119,7 @@ def done(request):
 @api_view(["DELETE"])
 @login_required()
 def delete_file(request):
+    time.sleep(2)
     doc = Vault.objects.get(id=request.data.get("id"))
     doc.delete_file()
     return Response(
@@ -132,6 +135,7 @@ def delete_file(request):
 @login_required()
 def generate_key_pair(request):
     if request.method == "POST":
+        time.sleep(2)
         try:
             if bool(request.user.key_pair):
                 return Response(
@@ -172,9 +176,10 @@ def generate_key_pair(request):
             )
 
 
-@api_view(["GET"])
+@api_view(["POST"])
 @login_required()
 def delete_key_pair(request):
+    time.sleep(2)
     try:
         pair = request.user.key_pair
         pair.delete_key_pair()
@@ -197,9 +202,10 @@ def delete_key_pair(request):
         )
 
 
-@api_view(["GET"])
+@api_view(["POST"])
 @login_required()
 def download_private_key(request):
+    time.sleep(2)
     try:
         key_pair = request.user.key_pair
         return Response(

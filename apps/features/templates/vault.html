@@ -162,6 +162,7 @@
 	<script>
 
 		dwnd = (id)=>{
+			showSpinner()
 			$.ajax({
 				url: "/api/features/download/",
 				type: 'POST',
@@ -170,8 +171,7 @@
 				headers: {'X-CSRFToken': csrftoken},
 				mode: 'same-origin',
 				success: function (response){
-					console.log(response)
-					alert("About to Download a File")
+					hideSpinner()
 					window.open(response.file, '_blank');
 				},
 			})
@@ -182,6 +182,7 @@
 		}
 
 		delete_file = (id)=>{
+			showSpinner()
 			$.ajax({
 				url: "/api/features/delete/",
 				type: 'DELETE',
@@ -190,11 +191,12 @@
 				headers: {'X-CSRFToken': csrftoken},
 				mode: 'same-origin',
 				success: function (response){
+					hideSpinner()
 					if (response.success){
 						success_noti(response.message)
 						window.location.reload()
 					}
-				},
+				}
 			})
 		}
 
@@ -210,7 +212,8 @@
 		}
 
 		decrypt = (id)=>{
-
+			$('#secretCollectionModal').modal('hide');
+			showSpinner()
 			let secs = []
 			let indices = []
 			const onlyInputs = document.querySelectorAll('#secretsForm input');
@@ -236,14 +239,13 @@
 				mode: 'same-origin',
 				contentType: "application/json; charset=utf-8",
 				success: function (response){
+					hideSpinner()
 					if (response.success){
 						lock_back(parseInt(id))
-						$('#secretCollectionModal').modal('hide');
 						success_noti(response.message)
 						window.open(response.file, '_blank');
 
 					}else{
-						console.log(response.message)
 						error_noti(response.message)
 					}
 				},

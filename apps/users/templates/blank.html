@@ -22,6 +22,20 @@
 	<link href="{% static 'assets/css/app.css' %}" rel="stylesheet">
 	<link href="{% static 'assets/css/icons.css' %}" rel="stylesheet">
 
+	<style>
+		.spinner_overlay {
+
+			position: fixed;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background-color: #fff;
+			opacity: 0.2;
+			z-index: 1000;
+		}
+	</style>
+
 	{% block extra_css %}
 
 	{% endblock %}
@@ -58,9 +72,6 @@
 					<ul>
 						<li> <a href="{% url 'dashboard' %}"><i class="bx bx-right-arrow-alt"></i>Home</a>
 						</li>
-						<li> <a href="#"><i class="bx bx-right-arrow-alt"></i>Second Home</a>
-						</li>
-
 					</ul>
 				</li>
 
@@ -349,18 +360,29 @@
 		<!--start page wrapper -->
 		<div class="page-wrapper">
 			<div class="page-content">
+
 				{% block content %}
-
 					<div style="height: 600px">
-
 						<h2>This is blank page </h2>
-
 					</div>
 				{% endblock %}
+
+				<div id="spinner" style="display: none">
+					<div class="spinner_overlay"></div>
+					<div class="col" style="position: fixed; top: 50%; left: 50%">
+						<div class="spinner-grow text-primary" role="status"> <span class="visually-hidden">Loading...</span></div>
+						<div class="spinner-grow text-success" role="status"> <span class="visually-hidden">Loading...</span></div>
+						<div class="spinner-grow text-danger" role="status"> <span class="visually-hidden">Loading...</span></div>
+						<div class="spinner-grow text-warning" role="status"> <span class="visually-hidden">Loading...</span></div>
+					</div>
+				</div>
 
 
 			</div>
 		</div>
+
+
+
 		<!--end page wrapper -->
 		<!--start overlay-->
 		<div class="overlay toggle-icon"></div>
@@ -476,6 +498,19 @@
 				icon: 'bx bx-check-circle',
 				msg: msg
 			});
+		}
+	</script>
+
+
+	<script>
+		showSpinner = ()=>{
+			// $('#spinner').css('visibility','visible');
+			$("#spinner").show()
+		}
+
+		hideSpinner = ()=>{
+			// $('#spinner').css('visibility','hidden');
+			$("#spinner").hide()
 		}
 	</script>
 
