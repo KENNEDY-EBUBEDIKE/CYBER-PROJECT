@@ -11,6 +11,10 @@ urlpatterns = [
     path('generate-key-pair/', generate_key_pair, name='api-generate_key_pair'),
     path('delete-key-pair/', delete_key_pair, name='api-delete_key_pair'),
     path('download-prvkey/', download_private_key, name='api-download_private_key'),
+    path('sign-document/', sign_document, name='api-sign_document'),
+    path('verify-document-signature/', verify_document_signature, name='api-verify_document_signature'),
+    path('unsign-document/', unsign_document, name='api-unsign_document'),
+    path('download-signature/', download_signature, name='api-download_signature'),
 ]
 
 

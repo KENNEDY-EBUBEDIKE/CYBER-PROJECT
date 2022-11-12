@@ -2,13 +2,17 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from django.contrib.auth.decorators import login_required
-from apps.features.models import Vault, RSAKeyPair
+from apps.features.models import Vault, RSAKeyPair, Signatures
 import time
 from django.contrib.auth import get_user_model
 from binascii import hexlify, unhexlify
 from django.db import IntegrityError
 from utilities.cryptography import generate_shared_secret,\
-    encrypt_file, retrieve_shared_key, decrypt_file, generate_rsa_key_pair
+    encrypt_file,\
+    retrieve_shared_key,\
+    decrypt_file,\
+    generate_rsa_key_pair,\
+    digital_signature, verify_digital_signature
 User = get_user_model()
 
 
@@ -31,7 +35,7 @@ def download(request):
 @api_view(["POST"])
 @login_required()
 def decrypt(request):
-    time.sleep(2)
+    time.sleep(1)
     secs = request.data["secrets"]
     indices = request.data["indices"]
 
@@ -119,7 +123,7 @@ def done(request):
 @api_view(["DELETE"])
 @login_required()
 def delete_file(request):
-    time.sleep(2)
+    time.sleep(1)
     doc = Vault.objects.get(id=request.data.get("id"))
     doc.delete_file()
     return Response(
@@ -135,7 +139,6 @@ def delete_file(request):
 @login_required()
 def generate_key_pair(request):
     if request.method == "POST":
-        time.sleep(2)
         try:
             if bool(request.user.key_pair):
                 return Response(
@@ -179,7 +182,7 @@ def generate_key_pair(request):
 @api_view(["POST"])
 @login_required()
 def delete_key_pair(request):
-    time.sleep(2)
+    time.sleep(1)
     try:
         pair = request.user.key_pair
         pair.delete_key_pair()
@@ -205,7 +208,7 @@ def delete_key_pair(request):
 @api_view(["POST"])
 @login_required()
 def download_private_key(request):
-    time.sleep(2)
+    time.sleep(1)
     try:
         key_pair = request.user.key_pair
         return Response(
@@ -226,3 +229,119 @@ def download_private_key(request):
                 status=status.HTTP_200_OK,
 
             )
+
+
+@api_view(["POST"])
+@login_required()
+def sign_document(request):
+    doc = Vault.objects.get(id=request.data['id'])
+    try:
+        private_key = request.user.key_pair.private_key
+    except User.key_pair.RelatedObjectDoesNotExist:
+        return Response(
+            data={
+                "success": False,
+                'message': "You have no key Pair! Please Generate"
+            },
+            status=status.HTTP_200_OK,
+        )
+    signature = digital_signature(doc.document.path, private_key.path)
+    try:
+        new_signature = Signatures.objects.create_signature(
+
+            document=doc,
+            signer=request.user,
+            signature=signature,
+        )
+        new_signature.save()
+    except ValueError as e:
+        return Response(
+            data={
+                "success": False,
+                'message': e
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    return Response(
+        data={
+            "success": True,
+            'message': "Document Signed Successfully"
+        },
+        status=status.HTTP_200_OK,
+    )
+
+
+@api_view(["POST"])
+@login_required()
+def verify_document_signature(request):
+    doc = Vault.objects.get(id=request.data['id'])
+    try:
+        signature = doc.signature.signature
+    except Vault.signature.RelatedObjectDoesNotExist:
+        return Response(
+            data={
+                "success": False,
+                'message': "This Document is not Signed"
+            },
+            status=status.HTTP_200_OK,
+        )
+    try:
+        public_key = doc.signature.signer.key_pair.public_key
+    except User.key_pair.RelatedObjectDoesNotExist:
+        return Response(
+            data={
+                "success": False,
+                'message': "This Document Cant be verified!\n The Signer has no Key"
+            },
+            status=status.HTTP_200_OK,
+        )
+    try:
+        verified = verify_digital_signature(doc.document.path, public_key.path, signature.path)
+        if verified:
+            return Response(
+                data={
+                    "success": True,
+                    'message': "Document is Authentic, Verified! and Signed",
+                    "signer": f'{doc.signature.signer.surname} {doc.signature.signer.first_name}'
+                },
+                status=status.HTTP_200_OK,
+            )
+    except ValueError as e:
+
+        return Response(
+            data={
+                "success": False,
+                'message': f"Document has {e} !!!"
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+@api_view(["DELETE"])
+@login_required()
+def unsign_document(request):
+    signature = Signatures.objects.get(id=request.data['id'])
+    signature.delete_signature()
+    return Response(
+        data={
+            "success": True,
+            'message': "Document Unsigned!"
+        },
+        status=status.HTTP_200_OK,
+    )
+
+
+@api_view(["POST"])
+@login_required()
+def download_signature(request):
+    time.sleep(1)
+    signature = Signatures.objects.get(id=int(request.data.get("id")))
+
+    return Response(
+        data={
+            "success": True,
+            "file": signature.signature.url
+        },
+        status=status.HTTP_200_OK,
+    )

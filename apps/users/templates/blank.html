@@ -83,12 +83,8 @@
 						<div class="menu-title">Application</div>
 					</a>
 					<ul>
-						<li> <a href="{% url 'vault' %}"><i class="bx bx-right-arrow-alt"></i>Vault</a>
-						</li>
-						<li> <a href="{% url 'upload_file' %}"><i class="bx bx-right-arrow-alt"></i>Upload & Encrypt Documents </a>
-						</li>
-						<li> <a href="#"><i class="bx bx-right-arrow-alt"></i>Digitally Sign Documents</a>
-						</li>
+						<li> <a href="{% url 'vault' %}"><i class="bx bx-right-arrow-alt"></i>Vault</a></li>
+						<li> <a href="{% url 'upload_file' %}"><i class="bx bx-right-arrow-alt"></i>Upload & Encrypt Documents </a></li>
 					</ul>
 				</li>
 				<li>
@@ -100,7 +96,7 @@
 					<ul>
 						<li> <a href="{% url 'shared_secrets' %}"><i class="bx bx-right-arrow-alt"></i>My Shared Secrets</a>
 						</li>
-						<li> <a href="#"><i class="bx bx-right-arrow-alt"></i>My Digital Signatures</a>
+						<li> <a href="{% url 'signed_documents' %}"><i class="bx bx-right-arrow-alt"></i>My Signed Documents</a>
 						</li>
 					</ul>
 				</li>
@@ -390,7 +386,8 @@
 		<!--Start Back To Top Button--> <a href="javaScript:" class="back-to-top"><i class="bx bxs-up-arrow-alt"></i></a>
 		<!--End Back To Top Button-->
 		<footer class="page-footer">
-			<p class="mb-0">Copyright © 2021. All right reserved.</p>
+			<p class="mb-0">Powered By Amod Cyber.</p>
+			<p class="mb-0">Copyright © 2022. All right reserved. NAUB Cyber Security</p>
 		</footer>
 	</div>
 	<!--end wrapper-->

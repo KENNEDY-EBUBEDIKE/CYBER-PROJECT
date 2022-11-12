@@ -1,12 +1,13 @@
 from django.urls import path
 from django.conf import settings
-from .views import vault, upload_file, user_shared_secrets
+from .views import vault, upload_file, user_shared_secrets, user_signed_documents
 
 urlpatterns = [
 
     path('vault/', vault, name='vault'),
     path('upload/', upload_file, name='upload_file'),
     path('shared-secrets/', user_shared_secrets, name='shared_secrets'),
+    path('signed-documents/', user_signed_documents, name='signed_documents'),
 ]
 
 

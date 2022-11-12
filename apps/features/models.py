@@ -40,7 +40,7 @@ class VaultManager(models.Manager):
         if not user:
             raise ValueError('USER IS REQUIRED!!')
         if not document_name:
-            raise ValueError('Name IS REQUIRED!!')
+            raise ValueError('Document Name IS REQUIRED!!')
         new_document = self.model(
             uploaded_by=user,
             document=document_file,
@@ -67,7 +67,7 @@ class Vault(models.Model):
     def delete_file(self):
         self.delete()
         os.remove(self.document.path)
-        return "SUCCESS"
+        return True
 
     def __str__(self):
         return self.name
@@ -92,7 +92,6 @@ class RSAKeyPairManager(models.Manager):
         )
 
         new_pair.save(using=self._db)
-
         return new_pair
 
 
@@ -108,7 +107,37 @@ class RSAKeyPair(models.Model):
         self.delete()
         os.remove(self.public_key.path)
         os.remove(self.private_key.path)
-        return "SUCCESS"
+        return True
 
     def __str__(self):
         return self.name
+
+
+class SignaturesManager(models.Manager):
+    def create_signature(self, signature, document, signer):
+        new_signature = self.model(
+            document=document,
+            signer=signer,
+            signature=File(io.BytesIO(signature), name=f'{document.name}".sign"'),
+        )
+
+        new_signature.save(using=self._db)
+
+        return new_signature
+
+
+class Signatures(models.Model):
+    signature = models.FileField(upload_to='file/signatures/', null=False)
+    document = models.OneToOneField('Vault', on_delete=models.CASCADE, related_name='signature')
+    signer = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='signatures')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = SignaturesManager()
+
+    def delete_signature(self):
+        self.delete()
+        os.remove(self.signature.path)
+        return True
+
+    def __str__(self):
+        return self.document.name

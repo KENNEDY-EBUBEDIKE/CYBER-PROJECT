@@ -26,6 +26,7 @@
 									<th>Date & Time Uploaded</th>
 									<th>Document Name</th>
 									<th>Status</th>
+									<th>Signature Status</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -52,8 +53,29 @@
 											</div>
 										</td>
 										<td>
+											{% if doc.signature %}
+												<span class="bx bx-font-color">SIGNED</span>
+<!--												<div class="d-flex align-items-center">-->
+<!--													<div class="">-->
+<!--															<img src="{{doc.signature.signer.photo.url}}" class="rounded-circle" width="46" height="46" alt="" />-->
+<!--													</div>-->
+
+<!--													<div class="ms-2">-->
+<!--														<h6 class="mb-1 font-14">{{doc.signature.signer.first_name}}</h6>-->
+<!--													</div>-->
+<!--												</div>-->
+											{% else %}
+												<span class="bx bx-font-color">NOT SIGNED</span>
+											{% endif %}
+										</td>
+										<td>
 											<div class="d-flex order-actions">
-												<a href="javascript:" onclick="getId('{{doc.id}}')" data-bs-toggle="modal" data-bs-target="#secretCollectionModal" id="decrypt"><i class="bx bx-code"></i></a>
+												<a href="javascript:" onclick="getId('{{doc.id}}')" data-bs-toggle="modal" data-bs-target="#secretCollectionModal" id="decrypt"><i class="bx bx-lock-open"></i></a>
+												{% if doc.signature %}
+													<a href="javascript:" onclick="verifySignature('{{doc.id}}')" class="ms-4" id="sign"><img src="{% static 'assets/images/signed.svg' %}" alt=""></a>
+												{% else %}
+													<a href="javascript:" onclick="signDocument('{{doc.id}}')" class="ms-4" id="sign"><img src="{% static 'assets/images/signature.svg' %}" alt=""></a>
+												{% endif %}
 												<a href="javascript:"  onclick="dwnd('{{doc.id}}')" class="ms-4" id="download"><i class='bx bxs-download'></i></a>
 												<a href="javascript:" onclick="delete_file('{{doc.id}}')" class="ms-4" id="delete"><i class='bx bxs-trash'></i></a>
 											</div>
@@ -251,6 +273,51 @@
 				},
 			})
 		}
+
+		signDocument = (id)=>{
+			showSpinner()
+			$.ajax({
+				url: "/api/features/sign-document/",
+				type: 'POST',
+				data: {
+					'id': parseInt(id),
+				},
+				dataType: "json",
+				headers: {'X-CSRFToken': csrftoken},
+				mode: 'same-origin',
+				success: function (response){
+					hideSpinner()
+					if (response.success){
+						success_noti(response.message)
+					}else{
+						error_noti(response.message)
+					}
+				},
+			})
+		}
+
+		verifySignature = (id)=>{
+			showSpinner()
+			$.ajax({
+				url: "/api/features/verify-document-signature/",
+				type: 'POST',
+				data: {
+					'id': parseInt(id),
+				},
+				dataType: "json",
+				headers: {'X-CSRFToken': csrftoken},
+				mode: 'same-origin',
+				success: function (response){
+					hideSpinner()
+					if (response.success){
+						success_noti(`${response.message} by ${response.signer}`)
+					}else{
+						error_noti(response.message)
+					}
+				},
+			})
+		}
+
 	</script>
 
 {% endblock %}

@@ -1,8 +1,10 @@
 from Crypto.Protocol.SecretSharing import Shamir
+from Crypto.Protocol.KDF import PBKDF2
 from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES
-from Crypto.Protocol.KDF import PBKDF2
 from Crypto.PublicKey import RSA
+from Crypto.Signature import pkcs1_15
+from Crypto.Hash import SHA256
 from binascii import hexlify, unhexlify
 from decouple import config
 
@@ -54,16 +56,30 @@ def decrypt_file(file, key):
 def generate_rsa_key_pair(size):
     key_pair = RSA.generate(size)  # generate an RSA key of specified size in bits
 
-    project_secret_key = config('SECRET_KEY')
-
     # extracting the public_key
     public_key = key_pair.publickey().export_key()
 
     # extracting the private key in encoded form
     private_key = key_pair.export_key(
-        passphrase=project_secret_key,
+        passphrase=config('SECRET_KEY'),
         pkcs=8,
         protection="PBKDF2WithHMAC-SHA1AndAES256-CBC"
     )
 
     return private_key, public_key
+
+
+# noinspection PyTypeChecker
+def digital_signature(file, private_key):
+    hash_obj = SHA256.new(open(file, 'rb').read())
+    signer = pkcs1_15.new(RSA.import_key(open(private_key, 'rb').read(), config('SECRET_KEY')))
+    signature = signer.sign(hash_obj)
+    return signature
+
+
+# noinspection PyTypeChecker
+def verify_digital_signature(file, public_key, signature):
+    hash_obj = SHA256.new(open(file, 'rb').read())
+    verifier = pkcs1_15.new(RSA.import_key(open(public_key, 'rb').read()))
+    verifier.verify(hash_obj, open(signature, 'rb').read())
+    return True

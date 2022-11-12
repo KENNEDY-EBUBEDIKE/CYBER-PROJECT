@@ -74,3 +74,9 @@ def vault(request):
 def user_shared_secrets(request):
     secrets = request.user.shared_secrets.all()
     return render(request, 'shared_secrets.html', {'secrets': secrets})
+
+
+@login_required()
+def user_signed_documents(request):
+    signatures = request.user.signatures.all()
+    return render(request, 'my-signed-docs.html', {'signatures': signatures})
