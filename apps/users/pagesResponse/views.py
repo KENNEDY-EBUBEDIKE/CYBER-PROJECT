@@ -64,16 +64,17 @@ def register(request):
         photo = request.FILES.get('photo')
 
         try:
-            new_user = user_model.objects.create_user(username=username, email=email, password=password)
-            new_user.first_name = first_name
-            new_user.surname = surname
-            new_user.appointment = appointment
+            new_user = user_model.objects.create_user(
+                username=username,
+                email=email,
+                password=password,
 
-            if not photo:
-                raise ValueError("A profile Photo is Required!")
-            else:
-                new_user.photo = photo
+                first_name=first_name,
+                surname=surname,
+                appointment=appointment,
+                photo=photo
 
+            )
             new_user.save()
         except (IntegrityError, ValueError) as e:
             return render(request, "authentication-signup.html", {'error_message': e})

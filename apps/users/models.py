@@ -7,15 +7,37 @@ from django.db import IntegrityError
 
 class UserProfileManager(BaseUserManager):
 
-    def create_user(self, email, username, password=None):
+    def create_user(self,
+                    email,
+                    username,
+                    first_name=None, surname=None,
+                    appointment=None, photo=None,
+                    password=None, ):
         if not email:  # validating email
             raise ValueError('EMAIL IS REQUIRED!!')
         if not username:  # validating username
             raise ValueError('USERNAME IS REQUIRED!!')
 
+        if not first_name:  # validating first_name
+            raise ValueError('First Name IS REQUIRED!!')
+
+        if not surname:  # validating surname
+            raise ValueError('Surname IS REQUIRED!!')
+
+        if not appointment:  # validating appointment
+            raise ValueError('Please enter your appointment')
+
+        if not photo:  # validating photo
+            raise ValueError('Profile Photo IS REQUIRED!!')
+
         email = self.normalize_email(email)  # normalizing the email
         user = self.model(email=email, username=username)  # creating user
         user.set_password(password)  # making the password hashed
+        user.surname = surname
+        user.first_name = first_name
+        user.appointment = appointment
+        user.photo = photo
+
         try:
             user.save(using=self._db)  # saving the user object
         except IntegrityError:
