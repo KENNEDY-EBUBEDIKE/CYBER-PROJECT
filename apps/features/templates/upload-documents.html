@@ -20,7 +20,7 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                    <li class="breadcrumb-item"><a href="javascript:"><i class="bx bx-home-alt"></i></a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">Documents</li>
                 </ol>
@@ -94,13 +94,12 @@
                                         <option value="{{user.id}}">{{user.surname}} {{user.first_name}}</option>
                                     {% endfor %}
 
-\
                                 </select>
                                 <div class="invalid-feedback">Please select a valid share holder.</div>
                             </div>
 
                             <div class="col-12">
-                                <button class="btn btn-light" type="submit">Submit form</button>
+                                <button class="btn btn-light" onclick="showSpinner()" type="submit">Submit form</button>
                             </div>
                         </div>
                     </div>
@@ -130,7 +129,7 @@
 			  'use strict'
 
 			  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-			  var forms = document.querySelectorAll('.needs-validation')
+			  let forms = document.querySelectorAll('.needs-validation')
 
 			  // Loop over them and prevent submission
 			  Array.prototype.slice.call(forms)
@@ -161,21 +160,5 @@
 			allowClear: Boolean($(this).data('allow-clear')),
 		});
 	</script>
-<!--    <script src="{% static 'assets/js/jquery.fancy-fileupload.js' %}" > </script>-->
-<!--    <script src="{% static 'assets/js/imageuploadify.min.js' %}" > </script>-->
-
-<!--    <script>-->
-<!--		$('#fancy-file-upload').FancyFileUpload({-->
-<!--			params: {-->
-<!--				action: 'fileuploader'-->
-<!--			},-->
-<!--			maxfilesize: 15000000,-->
-<!--            url : '/features/upload/',-->
-<!--            retries : 0,-->
-<!--            recordaudio : true,-->
-<!--            recordvideo : true,-->
-
-<!--		});-->
-<!--	</script>-->
 
 {% endblock %}
