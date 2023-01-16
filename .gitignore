@@ -130,4 +130,5 @@ dmypy.json
 .pyre/
 
 
-# Db
+# sockets
+config.sock

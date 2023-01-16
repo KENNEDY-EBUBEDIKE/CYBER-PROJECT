@@ -65,8 +65,9 @@ class Vault(models.Model):
     objects = VaultManager()
 
     def delete_file(self):
+        if self.document.path:
+            os.remove(self.document.path)
         self.delete()
-        os.remove(self.document.path)
         return True
 
     def __str__(self):

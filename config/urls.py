@@ -5,9 +5,9 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.users.pagesResponse.urls')),
+
     path('users/', include('apps.users.pagesResponse.urls')),
     path('api/users/', include('apps.users.api.urls')),
-
 
     path('features/', include('apps.features.pagesResponse.urls')),
     path('api/features/', include('apps.features.api.urls')),

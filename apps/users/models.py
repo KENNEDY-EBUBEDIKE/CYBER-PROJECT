@@ -1,8 +1,6 @@
-from django.db import models
+from django.db import models, IntegrityError
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-from django.urls import reverse
 import os
-from django.db import IntegrityError
 
 
 class UserProfileManager(BaseUserManager):
@@ -18,17 +16,17 @@ class UserProfileManager(BaseUserManager):
         if not username:  # validating username
             raise ValueError('USERNAME IS REQUIRED!!')
 
-        if not first_name:  # validating first_name
-            raise ValueError('First Name IS REQUIRED!!')
-
-        if not surname:  # validating surname
-            raise ValueError('Surname IS REQUIRED!!')
-
-        if not appointment:  # validating appointment
-            raise ValueError('Please enter your appointment')
-
-        if not photo:  # validating photo
-            raise ValueError('Profile Photo IS REQUIRED!!')
+        # if not first_name:  # validating first_name
+        #     raise ValueError('First Name IS REQUIRED!!')
+        #
+        # if not surname:  # validating surname
+        #     raise ValueError('Surname IS REQUIRED!!')
+        #
+        # if not appointment:  # validating appointment
+        #     raise ValueError('Please enter your appointment')
+        #
+        # if not photo:  # validating photo
+        #     raise ValueError('Profile Photo IS REQUIRED!!')
 
         email = self.normalize_email(email)  # normalizing the email
         user = self.model(email=email, username=username)  # creating user
@@ -68,9 +66,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     surname = models.CharField(max_length=255, null=True, blank=True)
 
     photo = models.ImageField(upload_to='image/', null=True)
-    appointment = models.CharField(max_length=255, default="Special Assistant")
+    appointment = models.CharField(max_length=255, default="Special Assistant", null=True, blank=True)
 
     is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
 
     objects = UserProfileManager()  # creating a profile manager for controlling the users model via command line
 

@@ -37,7 +37,12 @@
 										<td>
 											<div class="d-flex align-items-center">
 												<div class="">
-													<img src="{{doc.uploaded_by.photo.url}}" class="rounded-circle" width="46" height="46" alt="" />
+													{% if doc.uploaded_by.photo %}
+														<img src="{{doc.uploaded_by.photo.url}}" class="rounded-circle" width="46" height="46" alt="" />
+													{% else %}
+														<img src="{% static 'assets/images/avatars/avatar-11.png' %}" class="rounded-circle" width="46" height="46" alt="" />
+													{% endif %}
+
 												</div>
 												<div class="ms-2">
 													<h6 class="mb-1 font-14">{{doc.uploaded_by.surname}}  {{doc.uploaded_by.first_name}}</h6>
